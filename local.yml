@@ -2,8 +2,6 @@
 
 - name: Mantle
   become: yes
-  hosts: 127.0.0.1
-  connection: local
   tasks:
   - name: print out the hostname of target
     command: hostname
@@ -11,3 +9,12 @@
     apt: update_cache=yes
   - name: upgrade system packages
     apt: upgrade=yes
+  - name: Check that the somefile.conf exists
+    stat:
+      path: /etc/file.txt
+    register: stat_result
+  - name: Create the file, if it doesnt exist already
+    file:
+      path: /etc/file.txt
+      state: touch
+    when: stat_result.stat.exists == False 
