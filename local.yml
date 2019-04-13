@@ -2,7 +2,8 @@
 
 - name: Mantle
   become: yes
-  hosts: 127.0.0.1 
+  hosts: 127.0.0.1
+  connection: local
   tasks:
   - name: print out the hostname of target
     command: hostname
