@@ -5,7 +5,7 @@
 
 # Ansible prerequisites
 
-sudo apt-get install asciidoc devscripts python-dev libffi-dev libssl-dev cdbs sshpass -y
+sudo apt-get install python3-setuptools asciidoc devscripts python-dev libffi-dev libssl-dev cdbs sshpass -y
 
 pip3 install ansible==$ANSIBLE_VERSION
 # # Node Version Manager
