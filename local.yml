@@ -1,0 +1,11 @@
+---
+
+- name: Mantle
+  become: yes
+  tasks:
+  - name: print out the hostname of target
+    command: hostname
+  - name: update the apt package index 
+    apt: update_cache=yes
+  - name: upgrade system packages
+    apt: upgrade=yes
