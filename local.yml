@@ -3,6 +3,8 @@
 - name: Mantle
   become: yes
   hosts: 127.0.0.1
+  vars:
+    nvm_version: 0.34.0
   tasks:
   - name: print out the hostname of target
     command: hostname
@@ -10,12 +12,9 @@
     apt: update_cache=yes
   - name: upgrade system packages
     apt: upgrade=yes
-  - name: Check that the somefile.conf exists
-    stat:
-      path: /etc/file.txt
-    register: stat_result
-  - name: Create the file, if it doesnt exist already
-    file:
-      path: /etc/file.txt
-      state: touch
-    when: stat_result.stat.exists == False 
+  - name: nvm
+    shell: >
+      curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
+    args:
+      creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
