@@ -5,9 +5,9 @@
 
 # Ansible prerequisites
 
-apt-get install asciidoc devscripts python-dev libffi-dev libssl-dev cdbs sshpass -y
+sudo apt-get install asciidoc devscripts python-dev libffi-dev libssl-dev cdbs sshpass -y
 
-pip install ansible==$ANSIBLE_VERSION
+pip3 install ansible==$ANSIBLE_VERSION
 # # Node Version Manager
 
 # curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
