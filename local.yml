@@ -141,6 +141,12 @@
       create: yes
       line: "192.168.42.1 local.mandelbrot.network"
       state: present
+  - name: GO is on the PATH
+    become: yes
+    become_user: root
+    lineinfile:
+      dest: "{{ bash_rc }}"
+      line: "PATH=$PATH:/usr/local/go/bin"
   - name: GO Check
     shell: . {{ bash_rc }} && go version | grep {{ go_version }}
     ignore_errors: yes
@@ -153,12 +159,6 @@
       remote_src: yes
       src: "https://dl.google.com/go/{{ go_file }}"
       dest: /usr/local
-  - name: GO is on the PATH
-    become: yes
-    become_user: root
-    lineinfile:
-      dest: "{{ bash_rc }}"
-      line: "PATH=$PATH:/usr/local/go/bin"
   - name: Ensure GoPath exists
     file: 
       path: "{{ go_src }}"
