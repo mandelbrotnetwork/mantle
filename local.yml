@@ -175,6 +175,7 @@
   - name: Caddy Checkout Version
     git:
       repo: "https://github.com/mholt/caddy"
+      dest: "{{ caddy_src_dir }}"
       version: "{{ caddy_version }}"
   - name: Caddy Check Version
     shell: caddy -v | grep "{{ caddy_version }}"
