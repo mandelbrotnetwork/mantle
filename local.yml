@@ -68,6 +68,7 @@
       dest: "{{ pihole_dir }}/setupVars.conf"
       force: yes
   - name: PiHole installer is present
+    become: yes
     get_url:
       url: https://install.pi-hole.net
       dest: "{{ pihole_dir }}/install.sh"
