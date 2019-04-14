@@ -232,7 +232,17 @@
       regexp: "server.port\ *="
       line: "server.port = 1080"
   - name: Caddy is running
-    shell: . {{ bash_rc }}
+    shell: pm2 list | grep caddy
+    ignore_errors: yes
+    register: caddy_is_running
+  - name: Run Caddy
+    when: caddy_is_running is failed
+    shell: pm2 start caddy -- -conf=~/.mantle/Caddyfile
+  - name: PM2 save
+    when: caddy_is_running is failed
+    shell: pm2 save
+  - name: PM2 Startup
+    shell: pm2 startup
 
 
 
