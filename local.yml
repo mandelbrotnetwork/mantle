@@ -163,6 +163,7 @@
       src: "https://dl.google.com/go/{{ go_file }}"
       dest: /usr/local
   - name: Ensure GoPath exists
+    when: go_version_correct is failed
     file: 
       path: "{{ go_src }}"
       state: directory
@@ -174,26 +175,39 @@
     with_items:
       - "{{ caddy_src_repo }}"
       - "{{ caddy_build_repo }}"
+  - name: Caddy Check Version
+    shell: caddy -version | grep "Caddy {{ caddy_version }}"
+    ignore_errors: yes
+    register: caddy_version_correct
   - name: Caddy Checkout Version
+    when: caddy_version_correct is failed
     git:
       repo: "https://{{ caddy_src_repo }}"
       dest: "{{ caddy_src_dir }}"
       force: yes
       version: "{{ caddy_version }}"
-  - name: Caddy Check Version
-    shell: caddy -v | grep "{{ caddy_version }}"
-    ignore_errors: yes
-    register: caddy_version_correct
+  - name: Caddy telemetry disabled
+    when: caddy_version_correct is failed
+    lineinfile:
+      regexp: "^var EnableTelemetry"
+      line: "var EnableTelemetry = false"
+      dest: "{{ bash_rc }}"
   - name: Build Caddy
     when: caddy_version_correct is failed
+    retries: 10
+    delay: 3
+    register: result
+    until: result.rc == 0
     shell: . {{ bash_rc }} && export GO111MODULE=on && go run build.go
     args:
       chdir: "{{ caddy_src_dir }}/caddy"
   - name: Move Caddy to bins
     when: caddy_version_correct is failed
+    become: yes
+    become_user: root
     copy: 
       remote_src: yes
-      src: "{{ caddy_src_dir }}/caddy"
+      src: "{{ caddy_src_dir }}/caddy/caddy"
       dest: /usr/local/bin
 
 
