@@ -38,6 +38,7 @@
       creates: "{{ nvm_path }}"
   - name: Install correct Node Version
     become: yes
+    become_user: root
     shell: . {{ nvm_path }} && nvm install {{node_version}}
     args:
       creates: "{{ node_path }}"
