@@ -8,7 +8,7 @@
     nvm_version: 0.34.0
     node_version: 11.14.0
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
-    nvm_path: "{{ nvm_dir }}/.nvm.sh"
+    nvm_path: "{{ nvm_dir }}/nvm.sh"
     node_path: "{{ nvm_path }}/versions/v{{ node_version }}/bin/node"
   tasks:
   - name: apt-get update/upgrade
