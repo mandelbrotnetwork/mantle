@@ -176,7 +176,7 @@
       - "{{ caddy_src_repo }}"
       - "{{ caddy_build_repo }}"
   - name: Caddy Check Version
-    shell: caddy -version | grep "Caddy v{{ caddy_version }}"
+    shell: caddy -version | grep "Caddy {{ caddy_version }}"
     ignore_errors: yes
     register: caddy_version_correct
   - name: Caddy Checkout Version
