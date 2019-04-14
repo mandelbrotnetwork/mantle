@@ -23,7 +23,7 @@
     when: nvm_details.stat.exists == True
   - name: Trigger NVM Update
     file: path={{ nvm_path }} state=absent
-    when: nvm_current_version.stdout.find('{{nvm_version}}') == -1
+    when: nvm_current_version.stdout != {{nvm_version}}
   - name: Ensure NVM Installed
     shell: >
       curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
