@@ -88,7 +88,7 @@
   - name: Install PiHole
     become: yes
     become_user: root
-    script: "{{ pihole_installer }}--unattended"
+    script: "{{ pihole_installer }} --unattended"
     when: pihole_version_correct is failed
   - name: Pihole installer is removed
     file: 
