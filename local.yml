@@ -147,6 +147,7 @@
   - name: GO Install
     when: go_version_correct is failed
     unarchive:
+      remote_src: yes
       src: "https://dl.google.com/go/{{ go_file }}"
       dest: /usr/local
   - name: GO is on the PATH
