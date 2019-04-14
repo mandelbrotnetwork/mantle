@@ -25,12 +25,12 @@
     go_path: "{{ ansible_env.HOME }}/go"
     go_src: "{{ go_path }}/src"
   tasks:
-  - name: APT is up to date
-    become: yes
-    become_user: root
-    apt: 
-      upgrade: yes
-      update_cache: yes
+  # - name: APT is up to date
+  #   become: yes
+  #   become_user: root
+  #   apt: 
+  #     upgrade: yes
+  #     update_cache: yes
   - name: NVM is present
     stat:
       path: "{{ nvm_path }}"
@@ -56,10 +56,10 @@
     args:
       creates: "{{ node_path }}"
       executable: /bin/bash
-  - name: Node Alias is correct
-    shell: . ~/.bashrc && nvm alias default node
-    args:
-      executable: /bin/bash
+  # - name: Node Alias is correct
+  #   shell: . ~/.bashrc && nvm alias default node
+  #   args:
+  #     executable: /bin/bash
   - name: PM2 is installed
     shell: . ~/.bashrc && npm install -g pm2
     args: 
