@@ -146,6 +146,8 @@
     register: go_version_correct
   - name: GO Install
     when: go_version_correct is failed
+    become: yes
+    become_user: root
     unarchive:
       remote_src: yes
       src: "https://dl.google.com/go/{{ go_file }}"
