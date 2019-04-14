@@ -12,6 +12,7 @@
     pihole_version: 4.2.2 # must always be unchanged or latest
     go_version: 1.12.4
     caddy_version: 
+    bash_rc: "{{ ansible_env.HOME }}/.bashrc"
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
     node_dir: "{{ nvm_dir }}/versions/node/v{{ node_version }}"
@@ -61,7 +62,7 @@
   #   args:
   #     executable: /bin/bash
   - name: PM2 is installed
-    shell: . ~/.bashrc && npm install -g pm2
+    shell: . {{ bash_rc }} && npm install -g pm2
     args: 
       creates: "{{ pm2_path }}"
       executable: /bin/bash
@@ -141,7 +142,7 @@
       line: "192.168.42.1 local.mandelbrot.network"
       state: present
   - name: GO Check
-    shell: go version | grep {{ go_version }}
+    shell: . {{ bash_rc }} && go version | grep {{ go_version }}
     ignore_errors: yes
     register: go_version_correct
   - name: GO Install
@@ -156,7 +157,7 @@
     become: yes
     become_user: root
     lineinfile:
-      dest: /etc/profile
+      dest: "{{ bash_rc }}"
       line: "PATH=$PATH:/usr/local/go/bin"
   - name: Ensure GoPath exists
     file: 
