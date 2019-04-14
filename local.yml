@@ -15,7 +15,7 @@
     apt: upgrade=yes
   - name: Check for NVM
     stat:
-      path: {{ nvm_path }}
+      path: "{{ nvm_path }}"
     register: nvm_details
   - name: Check NVM Version
     shell: nvm --version
