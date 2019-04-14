@@ -11,7 +11,7 @@
     pm2_version: 3.5.0
     pihole_version: 4.2.2 # must always be unchanged or latest
     go_version: 1.12.4
-    caddy_version: v1.0.0-beta1
+    caddy_version: 1.0.0-beta1
     bash_rc: "{{ ansible_env.HOME }}/.bashrc"
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
@@ -185,7 +185,7 @@
       repo: "https://{{ caddy_src_repo }}"
       dest: "{{ caddy_src_dir }}"
       force: yes
-      version: "{{ caddy_version }}"
+      version: "v{{ caddy_version }}"
   - name: Caddy telemetry disabled
     when: caddy_version_correct is failed
     lineinfile:
