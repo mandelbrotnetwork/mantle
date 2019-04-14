@@ -19,6 +19,7 @@
     register: nvm_details
   - name: Check NVM Version
     shell: . {{ nvm_path }}/nvm.sh && nvm --version | grep {{nvm_version}}
+    ignore_errors: True
     register: nvm_version_correct
     when: nvm_details.stat.exists == True
   - name: Trigger NVM Update
