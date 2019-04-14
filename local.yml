@@ -142,6 +142,7 @@
     lineinfile:
       dest: /etc/pihole/lan.list
       create: yes
+      regexp: "192.168.42.1 local.mandelbrot.network"
       line: "192.168.42.1 local.mandelbrot.network"
       state: present
   - name: GO is on the PATH
