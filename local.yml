@@ -98,7 +98,7 @@
       path: "{{ pihole_installer }}" 
       state: absent
   - name: PiHole is Up to Date
-    shell: pihole --version | grep "Pi-hole version is v{{ pihole_version }}"
+    shell: pihole -v | grep "Pi-hole version is v{{ pihole_version }}"
     ignore_errors: yes
     register: pihole_version_correct
   - name: PiHole Update
@@ -124,6 +124,7 @@
     become_user: root
     lineinfile:
       dest: /etc/dnsmasq.d/02-lan.conf
+      create: yes
       line: "addn-hosts=/etc/pihole/lan.list"
       state: present
   - name: PiHole local lan list contains self reference to local.mandelbrot.network
