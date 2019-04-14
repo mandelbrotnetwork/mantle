@@ -49,15 +49,14 @@
       creates: "{{ node_path }}"
       executable: /bin/bash
   - name: Node Alias is correct
-    shell: . {{ nvm_path }} && nvm alias default node
+    shell: . ~/.bashrc && nvm alias default node
     args:
       executable: /bin/bash
   - name: PM2 is installed
-    become: false
-    npm: 
-      name: pm2
-      global: yes
-      executable: "{{ npm_path }}"
+    shell: . ~/.bashrc && npm install -g pm2
+    args: 
+      creates: "{{ pm2_path }}"
+      executable: /bin/bash
   - name: PiHole configuration file is Present
     copy:
       src: ./files/etc.pihole.setupVars.conf
