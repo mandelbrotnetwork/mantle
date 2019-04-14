@@ -53,7 +53,7 @@
     args:
       executable: /bin/bash
   - name: PM2 is installed
-    npm: 
+    yarn: 
       name: pm2
       global: yes
       production: yes
