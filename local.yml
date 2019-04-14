@@ -25,7 +25,9 @@
     go_file: "go{{ go_version }}.linux-armv6l.tar.gz"
     go_path: "{{ ansible_env.HOME }}/go"
     go_src: "{{ go_path }}/src"
-    caddy_src_dir: "{{ go_path }}/src/{{ item }}"
+    caddy_src_repo: "github.com/mholt/caddy"
+    caddy_build_repo: "github.com/caddyserver/builds"
+    caddy_src_dir: "{{ go_path }}/src/{{ caddy_src_repo }}"
   tasks:
   # - name: APT is up to date
   #   become: yes
@@ -170,11 +172,11 @@
       creates: "{{ caddy_src_dir }}"
       executable: /bin/bash
     with_items:
-      - 'github.com/mholt/caddy'
-      - 'github.com/caddyserver/builds'
+      - "{{ caddy_src_repo }}"
+      - "{{ caddy_build_repo }}"
   - name: Caddy Checkout Version
     git:
-      repo: "https://github.com/mholt/caddy"
+      repo: "https://{{ caddy_src_repo }}"
       dest: "{{ caddy_src_dir }}"
       version: "{{ caddy_version }}"
   - name: Caddy Check Version
