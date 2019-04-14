@@ -18,7 +18,7 @@
       path: "{{ nvm_path }}"
     register: nvm_details
   - name: Check NVM Version
-    shell: . {{ ansible_env.HOME }}/.bashrc && nvm --version | grep {{nvm_version}}
+    shell: . {{ nvm_path }}/nvm.sh && nvm --version | grep {{nvm_version}}
     register: nvm_version_correct
     when: nvm_details.stat.exists == True
   - name: Trigger NVM Update
