@@ -1,7 +1,6 @@
 ---
 
 - name: Mantle
-  become_user: benoit
   become: yes
   hosts: 127.0.0.1
   user: 
