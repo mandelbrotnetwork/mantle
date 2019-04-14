@@ -98,7 +98,7 @@
       path: "{{ pihole_installer }}" 
       state: absent
   - name: PiHole is Up to Date
-    shell: pihole --version | grep "Pi-hole version is v{{ pihole_version }}""
+    shell: pihole --version | grep "Pi-hole version is v{{ pihole_version }}"
     ignore_errors: yes
     register: pihole_version_correct
   - name: PiHole Update
