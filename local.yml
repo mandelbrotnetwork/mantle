@@ -9,7 +9,9 @@
     nvm_version: 0.34.0
     node_version: 11.14.0
     pm2_version: 3.5.0
-    pihole_version: 4.2.2
+    pihole_version: 4.2.2 # must always be unchanged or latest
+    go_version: 1.12.4
+    caddy_version: 
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
     node_dir: "{{ nvm_dir }}/versions/node/v{{ node_version }}"
@@ -19,6 +21,9 @@
     pm2_path: "{{ node_dir }}/bin/pm2"
     pihole_dir: "/etc/pihole"
     pihole_installer: "{{ pihole_dir }}/install.sh"
+    go_file: "go{{ go_version }}.linux-armv6l.tar.gz"
+    go_path: "{{ ansible_env.HOME }}/go"
+    go_src: "{{ go_path }}/src"
   tasks:
   - name: APT is up to date
     become: yes
@@ -135,4 +140,23 @@
       create: yes
       line: "192.168.42.1 local.mandelbrot.network"
       state: present
+  - name: GO Check
+    shell: go version | grep {{ go_version }}
+    ignore_errors: yes
+    register: go_version_correct
+  - name: GO Install
+    when: go_version_correct is failed
+    unarchive:
+      src: "https://dl.google.com/go/{{ go_file }}"
+      dest: /usr/local
+  - name: GO is on the PATH
+    become: yes
+    become_user: root
+    lineinfile:
+      dest: /etc/profile
+      line: "PATH=$PATH:/usr/local/go/bin"
+  - name: Ensure GoPath exists
+    file: 
+      path: "{{ gp_src }}"
+      state: directory
 
