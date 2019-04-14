@@ -59,10 +59,12 @@
       creates: "{{ pm2_path }}"
       executable: /bin/bash
   - name: Ensure PiHole Directory exists
+    become: yes
     file: 
       path: "{{ pihole_dir }}"
       state: directory
   - name: PiHole configuration file is Present
+    become: yes
     copy:
       src: files/etc.pihole.setupVars.conf
       dest: "{{ pihole_dir }}/setupVars.conf"
