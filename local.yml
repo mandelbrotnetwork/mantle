@@ -191,7 +191,7 @@
     lineinfile:
       regexp: "^var EnableTelemetry"
       line: "var EnableTelemetry = false"
-      dest: "{{ bash_rc }}"
+      dest: "{{ caddy_src_dir }}/caddy/caddymain/run.go"
   - name: Build Caddy
     when: caddy_version_correct is failed
     retries: 10
