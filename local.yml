@@ -53,11 +53,9 @@
     args:
       executable: /bin/bash
   - name: PM2 is installed
-    yarn: 
+    npm: 
       name: pm2
       global: yes
-      production: yes
-      version: "{{ pm2_version }}"
       executable: "{{ npm_path }}"
   - name: PiHole configuration file is Present
     copy:
