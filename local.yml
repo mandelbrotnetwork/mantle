@@ -226,7 +226,9 @@
       src: "{{ caddy_src_dir }}/caddy/caddy"
       dest: /usr/local/bin
   - name: Ensure ~/.mantle exists
-    file: path={{ nvm_dir }} state=directory
+    file: 
+      path: "{{ mantle_dir }}" 
+      state: directory
   - name: Caddyfile is present
     copy:
       src: files/Caddyfile
