@@ -70,16 +70,18 @@
     file:
       src: "{{ node_path }}"
       state: link
+      path: "/usr/local/bin/node"
       
   - name: PM2 is installed
     shell: . {{ bash_rc }} && npm install -g pm2
     args: 
       creates: "{{ pm2_path }}"
       executable: /bin/bash
-  - name: PM@ is symlinked
+  - name: PM2 is symlinked
     file:
       src: "{{ node_path }}"
       state: link
+      path: "/usr/local/bin/pm2"
   - name: Ensure PiHole Directory exists
     become: yes
     become_user: root
@@ -242,6 +244,8 @@
     when: caddy_is_running is failed
     shell: pm2 save
   - name: PM2 Startup
+    become: yes
+    become_user: root
     shell: pm2 startup
 
 
