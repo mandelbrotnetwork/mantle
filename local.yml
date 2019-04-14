@@ -11,7 +11,7 @@
     pm2_version: 3.5.0
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
-    node_dir: "{{ nvm_dir }}/versions/v{{ node_version }}"
+    node_dir: "{{ nvm_dir }}/versions/node/v{{ node_version }}"
     node_modules : "{{ node_dir }}/lib/node_modules"
     node_path: "{{ node_dir }}/bin/node"
     npm_path: "{{ node_dir }}/bin/npm"
