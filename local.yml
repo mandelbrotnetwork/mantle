@@ -110,15 +110,18 @@
       line: "BLOCKINGMODE=IP-NODATA-AAAA"
       state: present
   - name: PiHole configured as DHCPD NameServer
+    lineinfile:
       path: /etc/dhcp/dhcpd.conf
       regexp: "^\ *option domain-name-servers"
       line: "domain-name-servers 192.168.42.1;"
       state: present
   - name: PiHole consults local lan list
+    lineinfile:
       path: /etc/dnsmasq.d/02-lan.conf
       line: "addn-hosts=/etc/pihole/lan.list"
       state: present
   - name: PiHole local lan list contains self reference to local.mandelbrot.network
+    lineinfile:
       path: /etc/pihole/lan.list
       line: "192.168.42.1 local.mandelbrot.network"
       state: present
