@@ -37,8 +37,8 @@
     args:
       creates: "{{ nvm_path }}"
   - name: Install correct Node Version
-    shell: . {{ nvm_path }} && nvm install {{node_version}}
     become: yes
+    shell: . {{ nvm_path }} && nvm install {{node_version}}
     args:
       creates: "{{ node_path }}"
   - name: Make correct Node alias
