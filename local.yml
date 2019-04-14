@@ -17,6 +17,7 @@
     npm_path: "{{ node_dir }}/bin/npm"
     pm2_path: "{{ node_dir }}/bin/pm2"
     pihole_dir: "/etc/pihole"
+    pihole_installer: "{{ pihole_installer }}/install.sh"
   tasks:
   - name: APT is up to date
     become: yes
@@ -71,12 +72,25 @@
       src: files/etc.pihole.setupVars.conf
       dest: "{{ pihole_dir }}/setupVars.conf"
       force: yes
+  - name: PiHole is Up to Date
+    shell: pihole --version | grep {{pihole_version}}
+    ignore_errors: True
+    register: pihole_version_correct
   - name: PiHole installer is present
     become: yes
     become_user: root
     get_url:
+      force: yes
       url: https://install.pi-hole.net
-      dest: "{{ pihole_dir }}/install.sh"
+      dest: "{{ pihole_installer }}"
       mode: 0440
-
-
+    when: pihole_version_correct is failed
+  - name: Install PiHole
+    become: yes
+    become_user: root
+    script: "{{ pihole_installer }}--unattended"
+    when: pihole_version_correct is failed
+  - name: Pihole installer is removed
+    file: 
+      path: "{{ pihole_installer }}" 
+      state: absent
