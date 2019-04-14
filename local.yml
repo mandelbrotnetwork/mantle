@@ -37,9 +37,11 @@
   - name: Install Current NVM Version
     shell: >
       curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
+    args:
+      creates: "{{ nvm_path }}"
+      executable: /bin/bash
   - name: Install correct Node Version
-    become_user: root
-    shell: . {{ nvm_path }} && nvm install {{node_version}}
+    shell: nvm install {{node_version}}
     args:
       creates: "{{ node_path }}"
       executable: /bin/bash
