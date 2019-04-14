@@ -187,7 +187,7 @@
     when: caddy_version_correct is failed
     shell: . {{ bash_rc }} && export GO111MODULE=on && go run build.go
     args:
-      chdir: "{{ caddy_src_dir }}"
+      chdir: "{{ caddy_src_dir }}/caddy"
   - name: Move Caddy to bins
     when: caddy_version_correct is failed
     copy: 
