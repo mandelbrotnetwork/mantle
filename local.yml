@@ -62,4 +62,10 @@
       src: ./files/etc.pihole.setupVars.conf
       dest: /etc/pihole/setupVars.conf
       force: yes
+  - name: PiHole installer is present
+    get_url:
+      url: https://install.pi-hole.net
+      dest: /etc/pihole/install.sh
+      mode: 0440
+    
 
