@@ -11,12 +11,11 @@
     nvm_path: "{{ nvm_dir }}/.nvm.sh"
     node_path: "{{ nvm_path }}/versions/v{{ node_version }}/bin/node"
   tasks:
-  - name: update the apt package index
+  - name: apt-get update/upgrade
     become: yes
-    apt: update_cache=yes
-  - name: upgrade apt
-    become: yes
-    apt: upgrade=yes
+    apt: 
+      upgrade: yes
+      update_cache: yes
   - name: Check for NVM
     stat:
       path: "{{ nvm_path }}"
