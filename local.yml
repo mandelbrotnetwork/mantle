@@ -2,6 +2,7 @@
 
 - name: Mantle
   become_user: benoit
+  become: yes
   hosts: 127.0.0.1
   user: 
   vars:
@@ -12,7 +13,6 @@
     node_path: "{{ nvm_path }}/versions/v{{ node_version }}/bin/node"
   tasks:
   - name: apt-get update/upgrade
-    become: yes
     apt: 
       upgrade: yes
       update_cache: yes
