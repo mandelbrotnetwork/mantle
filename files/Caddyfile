@@ -1,0 +1,19 @@
+blackhole:80, pi.hole:80, {
+  root /var/www/html/pihole
+  log /var/log/caddy/blackhole.log
+
+  rewrite {
+    ext js
+    to index.js
+  }
+
+  proxy / localhost:1080 {
+    transparent
+  }
+}
+
+local.mandelbrot.network:80 {
+  proxy /pihole pi.hole:80 {
+    transparent
+  }
+}
