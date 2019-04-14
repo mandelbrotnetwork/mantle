@@ -37,7 +37,7 @@
     shell: >
       curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
   - name: Install correct Node Version
-    become: yessu 
+    become: yes
     shell: . {{ nvm_path }} && nvm install {{node_version}}
     args:
       creates: "{{ node_path }}"
