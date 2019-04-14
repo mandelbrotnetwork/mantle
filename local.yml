@@ -41,7 +41,7 @@
       creates: "{{ nvm_path }}"
       executable: /bin/bash
   - name: Install correct Node Version
-    shell: nvm install {{node_version}}
+    shell: . ~/.bashrc nvm install {{node_version}}
     args:
       creates: "{{ node_path }}"
       executable: /bin/bash
