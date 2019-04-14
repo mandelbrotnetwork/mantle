@@ -58,7 +58,6 @@
       global: yes
       production: yes
       version: "{{ pm2_version }}"
-      path: "{{ node_modules }}"
       executable: "{{ npm_path }}"
   - name: PiHole configuration file is Present
     copy:
