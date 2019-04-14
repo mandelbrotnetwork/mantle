@@ -27,7 +27,7 @@
   - name: Trigger NVM Update
     file: path={{ nvm_path }} state=absent
     when: nvm_version_correct is failed
-  - name: Ensure NVM Installed
+  - name: Install Current NVM Version
     shell: >
       curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
     args:
@@ -38,4 +38,4 @@
       creates: "{{ node_path }}"
   - name: Make correct Node alias
     shell: . {{ nvm_path }}/nvm.sh && nvm alias default node
-    
+
