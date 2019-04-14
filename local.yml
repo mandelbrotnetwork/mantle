@@ -2,6 +2,7 @@
 
 - name: Mantle
   hosts: 127.0.0.1
+  become: yes
   become_user: mantle
   user: 
   vars:
@@ -37,7 +38,7 @@
     shell: >
       curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
   - name: Install correct Node Version
-    become: yes
+    become_user: root
     shell: . {{ nvm_path }} && nvm install {{node_version}}
     args:
       creates: "{{ node_path }}"
