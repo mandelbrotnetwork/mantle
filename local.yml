@@ -13,10 +13,7 @@
   tasks:
   - name: update the apt package index 
     become: true
-    apt: update_cache=yes
-  - name: upgrade system packages
-    become: true
-    apt: upgrade=yes
+    apt: update_cache=yes upgrade=yes
   - name: Check for NVM
     stat:
       path: "{{ nvm_path }}"
