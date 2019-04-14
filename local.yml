@@ -9,7 +9,9 @@
     node_version: 11.14.0
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
-    node_path: "{{ nvm_path }}/versions/v{{ node_version }}/bin/node"
+    node_dir: "{{ nvm_dir }}/versions/v{{ node_version }}"
+    node_path: "{{ node_dir }}/bin/node"
+    pm2_path: "{{ node_dir }}/bin/pm2"
   tasks:
   - name: apt-get update/upgrade
     become: yes
@@ -34,14 +36,14 @@
   - name: Install Current NVM Version
     shell: >
       curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
-    args:
-      creates: "{{ nvm_path }}"
   - name: Install correct Node Version
-    become: yes
-    become_user: root
+    become: yessu 
     shell: . {{ nvm_path }} && nvm install {{node_version}}
     args:
       creates: "{{ node_path }}"
+      executable: /bin/bash
   - name: Make correct Node alias
     shell: . {{ nvm_path }} && nvm alias default node
+      executable: /bin/bash
+  - name: Ma
 
