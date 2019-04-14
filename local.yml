@@ -178,6 +178,7 @@
     git:
       repo: "https://{{ caddy_src_repo }}"
       dest: "{{ caddy_src_dir }}"
+      force: yes
       version: "{{ caddy_version }}"
   - name: Caddy Check Version
     shell: caddy -v | grep "{{ caddy_version }}"
