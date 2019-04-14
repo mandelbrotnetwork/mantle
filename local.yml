@@ -28,13 +28,15 @@
     caddy_src_repo: "github.com/mholt/caddy"
     caddy_build_repo: "github.com/caddyserver/builds"
     caddy_src_dir: "{{ go_path }}/src/{{ caddy_src_repo }}"
+    mantle_dir: "{{ ansible_env.HOME }}/.mantle"
+    caddy_file: "{{ mantle_dir }}/Caddyfile"
   tasks:
-  # - name: APT is up to date
-  #   become: yes
-  #   become_user: root
-  #   apt: 
-  #     upgrade: yes
-  #     update_cache: yes
+  - name: APT is up to date
+    become: yes
+    become_user: root
+    apt: 
+      upgrade: yes
+      update_cache: yes
   - name: NVM is present
     stat:
       path: "{{ nvm_path }}"
@@ -60,15 +62,24 @@
     args:
       creates: "{{ node_path }}"
       executable: /bin/bash
-  # - name: Node Alias is correct
-  #   shell: . ~/.bashrc && nvm alias default node
-  #   args:
-  #     executable: /bin/bash
+  - name: Node Alias is correct
+    shell: . ~/.bashrc && nvm alias default node
+    args:
+      executable: /bin/bash
+  - name: Node is symlinked
+    file:
+      src: "{{ node_path }}"
+      state: link
+      
   - name: PM2 is installed
     shell: . {{ bash_rc }} && npm install -g pm2
     args: 
       creates: "{{ pm2_path }}"
       executable: /bin/bash
+  - name: PM@ is symlinked
+    file:
+      src: "{{ node_path }}"
+      state: link
   - name: Ensure PiHole Directory exists
     become: yes
     become_user: root
@@ -142,7 +153,6 @@
     lineinfile:
       dest: /etc/pihole/lan.list
       create: yes
-      regexp: "192.168.42.1 local.mandelbrot.network"
       line: "192.168.42.1 local.mandelbrot.network"
       state: present
   - name: GO is on the PATH
@@ -210,5 +220,20 @@
       remote_src: yes
       src: "{{ caddy_src_dir }}/caddy/caddy"
       dest: /usr/local/bin
+  - name: Ensure ~/.mantle exists
+    file: path={{ nvm_dir }} state=directory
+  - name: Caddyfile is present
+    copy:
+      src: files/Caddyfile
+      dest: "{{ caddy_file }}"
+  - name: Change lighttpd Port
+    lineinfile:
+      dest: /etc/lighttpd/lighttpd.conf
+      regexp: "server.port\ *="
+      line: "server.port = 1080"
+  - name: Caddy is running
+    shell: . {{ bash_rc }}
+
+
 
 
