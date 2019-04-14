@@ -9,6 +9,7 @@
     nvm_version: 0.34.0
     node_version: 11.14.0
     pm2_version: 3.5.0
+    pihole_version: 4.2.2
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
     node_dir: "{{ nvm_dir }}/versions/node/v{{ node_version }}"
@@ -72,10 +73,10 @@
       src: files/etc.pihole.setupVars.conf
       dest: "{{ pihole_dir }}/setupVars.conf"
       force: yes
-  - name: PiHole is Up to Date
-    shell: pihole --version | grep {{pihole_version}}
-    ignore_errors: True
-    register: pihole_version_correct
+  - name: PiHole is installed
+    shell: which pihole
+    ignore_errors: yes
+    register: pihole_is_installed
   - name: PiHole installer is present
     become: yes
     become_user: root
@@ -84,15 +85,22 @@
       url: https://install.pi-hole.net
       dest: "{{ pihole_installer }}"
       mode: 0755
-    when: pihole_version_correct is failed
+    when: pihole_is_installed is failed
   - name: Install PiHole
     become: yes
     become_user: root
     script: "{{ pihole_installer }} --unattended"
-    when: pihole_version_correct is failed
+    when: pihole_is_installed is failed
   - name: Pihole installer is removed
     become: yes
     become_user: root
     file: 
       path: "{{ pihole_installer }}" 
       state: absent
+  - name: PiHole is Up to Date
+    shell: pihole --version | grep "Pi-hole version is v{{ pihole_version }}""
+    ignore_errors: yes
+    register: pihole_version_correct
+  - name: PiHole Update
+    shell: pihole -up
+    when: pihole_version_correct is failed
