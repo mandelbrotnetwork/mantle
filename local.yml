@@ -67,17 +67,20 @@
     args:
       executable: /bin/bash
   - name: Node is symlinked
+    become: yes
+    become_user: root
     file:
       src: "{{ node_path }}"
       state: link
       path: "/usr/local/bin/node"
-      
   - name: PM2 is installed
     shell: . {{ bash_rc }} && npm install -g pm2
     args: 
       creates: "{{ pm2_path }}"
       executable: /bin/bash
   - name: PM2 is symlinked
+    become: yes
+    become_user: root
     file:
       src: "{{ node_path }}"
       state: link
