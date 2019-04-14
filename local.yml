@@ -53,6 +53,7 @@
     args:
       executable: /bin/bash
   - name: PM2 is installed
+    become: false
     npm: 
       name: pm2
       global: yes
