@@ -4,7 +4,7 @@
   become: yes
   hosts: 127.0.0.1
   vars:
-    nvm_version: 0.34.0
+    nvm_version: 0.33.0
     nvm_path: "{{ ansible_env.HOME }}/.nvm"
   tasks:
   - name: print out the hostname of target
