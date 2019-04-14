@@ -17,7 +17,7 @@
     npm_path: "{{ node_dir }}/bin/npm"
     pm2_path: "{{ node_dir }}/bin/pm2"
     pihole_dir: "/etc/pihole"
-    pihole_installer: "{{ pihole_installer }}/install.sh"
+    pihole_installer: "{{ pihole_dir }}/install.sh"
   tasks:
   - name: APT is up to date
     become: yes
