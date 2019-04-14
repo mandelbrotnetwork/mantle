@@ -60,4 +60,9 @@
       version: "{{ pm2_version }}"
       path: "{{ node_modules }}"
       executable: "{{ npm_path }}"
+  - name: PiHole configuration file is Present
+    copy:
+      src: ./files/etc.pihole.setupVars.conf
+      dest: /etc/pihole/setupVars.conf
+      force: yes
 
