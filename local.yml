@@ -65,12 +65,12 @@
   - name: PiHole configuration file is Present
     copy:
       src: files/etc.pihole.setupVars.conf
-      dest: "{{ pihole_dir }}"/setupVars.conf
+      dest: "{{ pihole_dir }}/setupVars.conf"
       force: yes
   - name: PiHole installer is present
     get_url:
       url: https://install.pi-hole.net
-      dest: "{{ pihole_dir }}"/install.sh
+      dest: "{{ pihole_dir }}/install.sh"
       mode: 0440
 
 
