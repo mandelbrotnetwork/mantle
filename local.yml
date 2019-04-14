@@ -132,6 +132,7 @@
     become_user: root
     lineinfile:
       dest: /etc/pihole/lan.list
+      create: yes
       line: "192.168.42.1 local.mandelbrot.network"
       state: present
 
