@@ -46,5 +46,4 @@
     shell: . {{ nvm_path }} && nvm alias default node
     args:
       executable: /bin/bash
-  - name: Ma
 
