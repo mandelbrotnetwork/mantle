@@ -234,6 +234,8 @@
       src: files/Caddyfile
       dest: "{{ caddy_file }}"
   - name: Change lighttpd Port
+    become: yes
+    become_user: root
     lineinfile:
       dest: /etc/lighttpd/lighttpd.conf
       regexp: "server.port\ *="
