@@ -83,7 +83,7 @@
       force: yes
       url: https://install.pi-hole.net
       dest: "{{ pihole_installer }}"
-      mode: 0440
+      mode: 0550
     when: pihole_version_correct is failed
   - name: Install PiHole
     become: yes
@@ -91,6 +91,8 @@
     script: "{{ pihole_installer }} --unattended"
     when: pihole_version_correct is failed
   - name: Pihole installer is removed
+    become: yes
+    become_user: root
     file: 
       path: "{{ pihole_installer }}" 
       state: absent
