@@ -105,22 +105,30 @@
     shell: pihole -up
     when: pihole_version_correct is failed
   - name: PiHole Blocking enabled
+    become: yes
+    become_user: root
     lineinfile:
       dest: "{{ pihole_dir }}/pihole-FTL.conf"
       line: "BLOCKINGMODE=IP-NODATA-AAAA"
       state: present
   - name: PiHole configured as DHCPD NameServer
+    become: yes
+    become_user: root
     lineinfile:
       dest: /etc/dhcp/dhcpd.conf
       regexp: "^\ *option domain-name-servers"
       line: "domain-name-servers 192.168.42.1;"
       state: present
   - name: PiHole consults local lan list
+    become: yes
+    become_user: root
     lineinfile:
       dest: /etc/dnsmasq.d/02-lan.conf
       line: "addn-hosts=/etc/pihole/lan.list"
       state: present
   - name: PiHole local lan list contains self reference to local.mandelbrot.network
+    become: yes
+    become_user: root
     lineinfile:
       dest: /etc/pihole/lan.list
       line: "192.168.42.1 local.mandelbrot.network"
