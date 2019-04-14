@@ -59,7 +59,7 @@
       executable: /bin/bash
   - name: PiHole configuration file is Present
     copy:
-      src: ./files/etc.pihole.setupVars.conf
+      src: files/etc.pihole.setupVars.conf
       dest: /etc/pihole/setupVars.conf
       force: yes
   - name: PiHole installer is present
@@ -67,5 +67,5 @@
       url: https://install.pi-hole.net
       dest: /etc/pihole/install.sh
       mode: 0440
-    
+
 
