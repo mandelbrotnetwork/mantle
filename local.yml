@@ -83,7 +83,7 @@
       force: yes
       url: https://install.pi-hole.net
       dest: "{{ pihole_installer }}"
-      mode: 0111
+      mode: 0755
     when: pihole_version_correct is failed
   - name: Install PiHole
     become: yes
