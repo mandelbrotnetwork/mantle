@@ -2,7 +2,7 @@
 
 - name: Mantle
   hosts: 127.0.0.1
-  become_user: benoit
+  become_user: mantle
   user: 
   vars:
     nvm_version: 0.34.0
@@ -29,13 +29,16 @@
   - name: Trigger NVM Update
     file: path={{ nvm_path }} state=absent
     when: nvm_version_correct is failed
+  - name: Ensure ~/.nvm exists
+    file: path={{ nvm_dir }} state=directory
   - name: Install Current NVM Version
     shell: >
-      mkdir ~/.nvm && curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
+      curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
     args:
       creates: "{{ nvm_path }}"
   - name: Install correct Node Version
     shell: . {{ nvm_path }} && nvm install {{node_version}}
+    become: yes
     args:
       creates: "{{ node_path }}"
   - name: Make correct Node alias
