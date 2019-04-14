@@ -11,7 +11,7 @@
     pm2_version: 3.5.0
     pihole_version: 4.2.2 # must always be unchanged or latest
     go_version: 1.12.4
-    caddy_version: 
+    caddy_version: v1.0.0-beta1
     bash_rc: "{{ ansible_env.HOME }}/.bashrc"
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
@@ -25,6 +25,7 @@
     go_file: "go{{ go_version }}.linux-armv6l.tar.gz"
     go_path: "{{ ansible_env.HOME }}/go"
     go_src: "{{ go_path }}/src"
+    caddy_src_dir: "{{ go_path }}/src/{{ item }}"
   tasks:
   # - name: APT is up to date
   #   become: yes
@@ -108,8 +109,8 @@
     ignore_errors: yes
     register: pihole_version_correct
   - name: PiHole Update
-    shell: pihole -up
     when: pihole_version_correct is failed
+    shell: pihole -up
   - name: PiHole Blocking enabled
     become: yes
     become_user: root
@@ -163,4 +164,32 @@
     file: 
       path: "{{ go_src }}"
       state: directory
+  - name: Caddy repos present
+    shell: . {{ bash_rc }} && go get -u {{ item }}
+    args:
+      creates: "{{ caddy_src_dir }}"
+      executable: /bin/bash
+    with_items:
+      - 'github.com/mholt/caddy'
+      - 'github.com/caddyserver/builds'
+  - name: Caddy Checkout Version
+    git:
+      repo: "https://github.com/mholt/caddy"
+      version: {{ caddy_version }}
+  - name: Caddy Check Version
+    shell: caddy -v | grep "{{ caddy_version }}"
+    ignore_errors: yes
+    register: caddy_version_correct
+  - name: Build Caddy
+    when: caddy_version_correct is failed
+    shell: . {{ bash_rc }} && export GO111MODULE=on && go run build.go
+    args:
+      chdir: "{{ caddy_src_dir }}"
+  - name: Move Caddy to bins
+    when: caddy_version_correct is failed
+    copy: 
+      remote_src: yes
+      src: "{{ caddy_src_dir }}/caddy"
+      dest: /usr/local/bin
+      
 
