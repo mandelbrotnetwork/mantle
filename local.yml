@@ -12,6 +12,7 @@
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
     node_dir: "{{ nvm_dir }}/versions/v{{ node_version }}"
+    node_modules : "{{ node_dir }}/lib/node_modules"
     node_path: "{{ node_dir }}/bin/node"
     npm_path: "{{ node_dir }}/bin/npm"
     pm2_path: "{{ node_dir }}/bin/pm2"
@@ -57,5 +58,6 @@
       global: yes
       production: yes
       version: "{{ pm2_version }}"
+      path: "{{ node_modules }}"
       executable: "{{ npm_path }}"
 
