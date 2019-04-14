@@ -30,9 +30,8 @@
     file: path={{ nvm_path }} state=absent
     when: nvm_version_correct is failed
   - name: Install Current NVM Version
-    become_user: benoit
     shell: >
-      curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
+      mkdir ~/.nvm && curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
     args:
       creates: "{{ nvm_path }}"
   - name: Install correct Node Version
