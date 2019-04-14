@@ -16,6 +16,7 @@
     node_path: "{{ node_dir }}/bin/node"
     npm_path: "{{ node_dir }}/bin/npm"
     pm2_path: "{{ node_dir }}/bin/pm2"
+    pihole_dir: "/etc/pihole"
   tasks:
   - name: APT is up to date
     become: yes
@@ -57,15 +58,19 @@
     args: 
       creates: "{{ pm2_path }}"
       executable: /bin/bash
+  - name: Ensure PiHole Directory exists
+    file: 
+      path: "{{ pihole_dir }}"
+      state: directory
   - name: PiHole configuration file is Present
     copy:
       src: files/etc.pihole.setupVars.conf
-      dest: /etc/pihole/setupVars.conf
+      dest: "{{ pihole_dir }}"/setupVars.conf
       force: yes
   - name: PiHole installer is present
     get_url:
       url: https://install.pi-hole.net
-      dest: /etc/pihole/install.sh
+      dest: "{{ pihole_dir }}"/install.sh
       mode: 0440
 
 
