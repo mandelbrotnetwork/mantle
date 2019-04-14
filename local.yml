@@ -8,19 +8,21 @@
   vars:
     nvm_version: 0.34.0
     node_version: 11.14.0
+    pm2_version: 3.5.0
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
     node_dir: "{{ nvm_dir }}/versions/v{{ node_version }}"
     node_path: "{{ node_dir }}/bin/node"
+    npm_path: "{{ node_dir }}/bin/npm"
     pm2_path: "{{ node_dir }}/bin/pm2"
   tasks:
-  - name: apt-get update/upgrade
+  - name: APT is up to date
     become: yes
     become_user: root
     apt: 
       upgrade: yes
       update_cache: yes
-  - name: Check for NVM
+  - name: NVM is present
     stat:
       path: "{{ nvm_path }}"
     register: nvm_details
@@ -29,7 +31,7 @@
     ignore_errors: True
     register: nvm_version_correct
     when: nvm_details.stat.exists == True
-  - name: Trigger NVM Update
+  - name: NVM is correct Version
     file: path={{ nvm_path }} state=absent
     when: nvm_version_correct is failed
   - name: Ensure ~/.nvm exists
@@ -40,13 +42,20 @@
     args:
       creates: "{{ nvm_path }}"
       executable: /bin/bash
-  - name: Install correct Node Version
+  - name: Node Version is Installed
     shell: . ~/.bashrc && nvm install {{node_version}}
     args:
       creates: "{{ node_path }}"
       executable: /bin/bash
-  - name: Make correct Node alias
+  - name: Node Alias is correct
     shell: . {{ nvm_path }} && nvm alias default node
     args:
       executable: /bin/bash
+  - name: PM2 is installed
+    npm: 
+      name: pm2
+      global: yes
+      production: yes
+      version: "{{ pm2_version }}"
+      executable: "{{ npm_path }}"
 
