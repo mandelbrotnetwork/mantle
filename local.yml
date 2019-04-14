@@ -1,8 +1,9 @@
 ---
 
 - name: Mantle
-  become: yes
+  become_user: benoit
   hosts: 127.0.0.1
+  user: 
   vars:
     nvm_version: 0.34.0
     node_version: 11.14.0
@@ -10,11 +11,11 @@
     nvm_path: "{{ nvm_dir }}/.nvm.sh"
     node_path: "{{ nvm_path }}/versions/v{{ node_version }}/bin/node"
   tasks:
-  - name: print out the hostname of target
-    command: hostname
   - name: update the apt package index 
+    become: true
     apt: update_cache=yes
   - name: upgrade system packages
+    become: true
     apt: upgrade=yes
   - name: Check for NVM
     stat:
