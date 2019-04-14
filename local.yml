@@ -126,7 +126,7 @@
     lineinfile:
       dest: /etc/dhcp/dhcpd.conf
       regexp: "^\ *option domain-name-servers"
-      line: "domain-name-servers 192.168.42.1;"
+      line: " option domain-name-servers 192.168.42.1;"
       state: present
   - name: PiHole consults local lan list
     become: yes
