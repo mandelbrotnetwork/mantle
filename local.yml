@@ -253,7 +253,6 @@
     shell: pm2 save
   - name: PM2 Startup
     become: yes
-    become_user: root
     shell: . {{ bash_rc }} && pm2 startup
 
 
