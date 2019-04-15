@@ -270,7 +270,9 @@
       executable: /bin/bash
   - name: PM2 save
     when: caddy_is_running is failed
-    shell: pm2 save
+    shell: . {{ bash_rc }} && pm2 save
+    args:
+      executable: /bin/bash
   - name: PM2 Startup
     shell: sudo env PATH=$PATH:{{ node_dir }}/bin pm2 startup systemd -u mantle --hp {{ ansible_env.HOME }}
     args:
