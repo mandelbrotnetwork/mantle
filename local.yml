@@ -250,7 +250,9 @@
   - name: Restart Lighttpd
     become: yes
     become_user: root
-    
+    service:
+      name: lighttpd
+      state: restarted
   - name: Caddy is running
     shell: pm2 list | grep caddy
     ignore_errors: yes
