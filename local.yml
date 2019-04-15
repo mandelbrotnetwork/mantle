@@ -32,231 +32,231 @@
     caddy_file: "{{ mantle_dir }}/Caddyfile"
     pm2_service: /etc/systemd/system/pm2-mantle.service
   tasks:
-  # - name: APT is up to date
-  #   become: yes
-  #   become_user: root
-  #   apt: 
-  #     upgrade: yes
-  #     update_cache: yes
-  # - name: NVM is present
-  #   stat:
-  #     path: "{{ nvm_path }}"
-  #   register: nvm_details
-  # - name: Check NVM Version
-  #   shell: . {{ nvm_path }} && nvm --version | grep {{nvm_version}}
-  #   ignore_errors: True
-  #   register: nvm_version_correct
-  #   when: nvm_details.stat.exists == True
-  # - name: NVM is correct Version
-  #   file: path={{ nvm_path }} state=absent
-  #   when: nvm_version_correct is failed
-  # - name: Ensure ~/.nvm exists
-  #   file: path={{ nvm_dir }} state=directory
-  # - name: Install Current NVM Version
-  #   shell: >
-  #     curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
-  #   args:
-  #     creates: "{{ nvm_path }}"
-  #     executable: /bin/bash
-  # - name: Node Version is Installed
-  #   shell: . ~/.bashrc && nvm install {{node_version}}
-  #   args:
-  #     creates: "{{ node_path }}"
-  #     executable: /bin/bash
-  # - name: Node Alias is correct
-  #   shell: . ~/.bashrc && nvm alias default node
-  #   args:
-  #     executable: /bin/bash
-  # - name: Node is symlinked
-  #   become: yes
-  #   become_user: root
-  #   file:
-  #     src: "{{ node_path }}"
-  #     state: link
-  #     path: "/usr/local/bin/node"
-  # - name: PM2 is installed
-  #   shell: . {{ bash_rc }} && npm install -g pm2
-  #   args: 
-  #     creates: "{{ pm2_path }}"
-  #     executable: /bin/bash
-  # - name: PM2 is symlinked
-  #   become: yes
-  #   become_user: root
-  #   file:
-  #     src: "{{ node_path }}"
-  #     state: link
-  #     path: "/usr/local/bin/pm2"
-  # - name: Ensure PiHole Directory exists
-  #   become: yes
-  #   become_user: root
-  #   file: 
-  #     path: "{{ pihole_dir }}"
-  #     state: directory
-  # - name: PiHole configuration file is Present
-  #   become: yes
-  #   become_user: root
-  #   copy:
-  #     src: files/etc.pihole.setupVars.conf
-  #     dest: "{{ pihole_dir }}/setupVars.conf"
-  #     force: yes
-  # - name: PiHole is installed
-  #   shell: which pihole
-  #   ignore_errors: yes
-  #   register: pihole_is_installed
-  # - name: PiHole installer is present
-  #   become: yes
-  #   become_user: root
-  #   get_url:
-  #     force: yes
-  #     url: https://install.pi-hole.net
-  #     dest: "{{ pihole_installer }}"
-  #     mode: 0755
-  #   when: pihole_is_installed is failed
-  # - name: Install PiHole
-  #   become: yes
-  #   become_user: root
-  #   script: "{{ pihole_installer }} --unattended"
-  #   when: pihole_is_installed is failed
-  # - name: Pihole installer is removed
-  #   become: yes
-  #   become_user: root
-  #   file: 
-  #     path: "{{ pihole_installer }}" 
-  #     state: absent
-  # - name: PiHole is Up to Date
-  #   shell: pihole -v | grep "Pi-hole version is v{{ pihole_version }}"
-  #   ignore_errors: yes
-  #   register: pihole_version_correct
-  # - name: PiHole Update
-  #   when: pihole_version_correct is failed
-  #   shell: pihole -up
-  # - name: PiHole Blocking enabled
-  #   become: yes
-  #   become_user: root
-  #   lineinfile:
-  #     dest: "{{ pihole_dir }}/pihole-FTL.conf"
-  #     line: "BLOCKINGMODE=IP-NODATA-AAAA"
-  #     state: present
-  # - name: PiHole configured as DHCPD NameServer
-  #   become: yes
-  #   become_user: root
-  #   lineinfile:
-  #     dest: /etc/dhcp/dhcpd.conf
-  #     regexp: "^\ *option domain-name-servers"
-  #     line: " option domain-name-servers 192.168.42.1;"
-  #     state: present
-  # - name: PiHole consults local lan list
-  #   become: yes
-  #   become_user: root
-  #   lineinfile:
-  #     dest: /etc/dnsmasq.d/02-lan.conf
-  #     create: yes
-  #     line: "addn-hosts=/etc/pihole/lan.list"
-  #     state: present
-  # - name: PiHole local lan list is present
-  #   become: yes
-  #   become_user: root
-  #   copy:
-  #     dest: /etc/pihole/lan.list
-  #     src: files/etc.pihole.lan.list
-  # - name: Restard DHCPD
-  #   become: yes
-  #   become_user: root
-  #   service:
-  #     name: isc-dhcp-server
-  #     state: restarted
-  # - name: GO is on the PATH
-  #   become: yes
-  #   become_user: root
-  #   lineinfile:
-  #     dest: "{{ bash_rc }}"
-  #     line: "PATH=$PATH:/usr/local/go/bin"
-  # - name: GO Check
-  #   shell: . {{ bash_rc }} && go version | grep {{ go_version }}
-  #   ignore_errors: yes
-  #   register: go_version_correct
-  # - name: GO Install
-  #   when: go_version_correct is failed
-  #   become: yes
-  #   become_user: root
-  #   unarchive:
-  #     remote_src: yes
-  #     src: "https://dl.google.com/go/{{ go_file }}"
-  #     dest: /usr/local
-  # - name: Ensure GoPath exists
-  #   when: go_version_correct is failed
-  #   file: 
-  #     path: "{{ go_src }}"
-  #     state: directory
-  # - name: Caddy repos present
-  #   shell: . {{ bash_rc }} && go get -u {{ item }}
-  #   args:
-  #     creates: "{{ caddy_src_dir }}"
-  #     executable: /bin/bash
-  #   with_items:
-  #     - "{{ caddy_src_repo }}"
-  #     - "{{ caddy_build_repo }}"
-  # - name: Caddy Check Version
-  #   shell: caddy -version | grep "Caddy {{ caddy_version }}"
-  #   ignore_errors: yes
-  #   register: caddy_version_correct
-  # - name: Caddy Checkout Version
-  #   when: caddy_version_correct is failed
-  #   git:
-  #     repo: "https://{{ caddy_src_repo }}"
-  #     dest: "{{ caddy_src_dir }}"
-  #     force: yes
-  #     version: "v{{ caddy_version }}"
-  # - name: Caddy telemetry disabled
-  #   when: caddy_version_correct is failed
-  #   lineinfile:
-  #     regexp: "^var EnableTelemetry"
-  #     line: "var EnableTelemetry = false"
-  #     dest: "{{ caddy_src_dir }}/caddy/caddymain/run.go"
-  # - name: Build Caddy
-  #   when: caddy_version_correct is failed
-  #   retries: 10
-  #   delay: 3
-  #   register: result
-  #   until: result.rc == 0
-  #   shell: . {{ bash_rc }} && export GO111MODULE=on && go run build.go
-  #   args:
-  #     chdir: "{{ caddy_src_dir }}/caddy"
-  # - name: Move Caddy to bins
-  #   when: caddy_version_correct is failed
-  #   become: yes
-  #   become_user: root
-  #   copy: 
-  #     remote_src: yes
-  #     src: "{{ caddy_src_dir }}/caddy/caddy"
-  #     dest: /usr/local/bin
-  #     mode: 0755
-  # - name: Caddy SetCap
-  #   when: caddy_version_correct is failed
-  #   become: yes
-  #   become_user: root
-  #   shell: setcap cap_net_bind_service=+ep /usr/local/bin/caddy
-  # - name: Ensure ~/.mantle exists
-  #   file: 
-  #     path: "{{ mantle_dir }}" 
-  #     state: directory
-  # - name: Caddyfile is present
-  #   copy:
-  #     src: files/Caddyfile
-  #     dest: "{{ caddy_file }}"
-  # - name: Change lighttpd Port
-  #   become: yes
-  #   become_user: root
-  #   lineinfile:
-  #     dest: /etc/lighttpd/lighttpd.conf
-  #     regexp: "server.port\ *="
-  #     line: "server.port = 1080"
-  # - name: Restart Lighttpd
-  #   become: yes
-  #   become_user: root
-  #   service:
-  #     name: lighttpd
-  #     state: restarted
+  - name: APT is up to date
+    become: yes
+    become_user: root
+    apt: 
+      upgrade: yes
+      update_cache: yes
+  - name: NVM is present
+    stat:
+      path: "{{ nvm_path }}"
+    register: nvm_details
+  - name: Check NVM Version
+    shell: . {{ nvm_path }} && nvm --version | grep {{nvm_version}}
+    ignore_errors: True
+    register: nvm_version_correct
+    when: nvm_details.stat.exists == True
+  - name: NVM is correct Version
+    file: path={{ nvm_path }} state=absent
+    when: nvm_version_correct is failed
+  - name: Ensure ~/.nvm exists
+    file: path={{ nvm_dir }} state=directory
+  - name: Install Current NVM Version
+    shell: >
+      curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{ nvm_version }}/install.sh | bash
+    args:
+      creates: "{{ nvm_path }}"
+      executable: /bin/bash
+  - name: Node Version is Installed
+    shell: . ~/.bashrc && nvm install {{node_version}}
+    args:
+      creates: "{{ node_path }}"
+      executable: /bin/bash
+  - name: Node Alias is correct
+    shell: . ~/.bashrc && nvm alias default node
+    args:
+      executable: /bin/bash
+  - name: Node is symlinked
+    become: yes
+    become_user: root
+    file:
+      src: "{{ node_path }}"
+      state: link
+      path: "/usr/local/bin/node"
+  - name: PM2 is installed
+    shell: . {{ bash_rc }} && npm install -g pm2
+    args: 
+      creates: "{{ pm2_path }}"
+      executable: /bin/bash
+  - name: PM2 is symlinked
+    become: yes
+    become_user: root
+    file:
+      src: "{{ node_path }}"
+      state: link
+      path: "/usr/local/bin/pm2"
+  - name: Ensure PiHole Directory exists
+    become: yes
+    become_user: root
+    file: 
+      path: "{{ pihole_dir }}"
+      state: directory
+  - name: PiHole configuration file is Present
+    become: yes
+    become_user: root
+    copy:
+      src: files/etc.pihole.setupVars.conf
+      dest: "{{ pihole_dir }}/setupVars.conf"
+      force: yes
+  - name: PiHole is installed
+    shell: which pihole
+    ignore_errors: yes
+    register: pihole_is_installed
+  - name: PiHole installer is present
+    become: yes
+    become_user: root
+    get_url:
+      force: yes
+      url: https://install.pi-hole.net
+      dest: "{{ pihole_installer }}"
+      mode: 0755
+    when: pihole_is_installed is failed
+  - name: Install PiHole
+    become: yes
+    become_user: root
+    script: "{{ pihole_installer }} --unattended"
+    when: pihole_is_installed is failed
+  - name: Pihole installer is removed
+    become: yes
+    become_user: root
+    file: 
+      path: "{{ pihole_installer }}" 
+      state: absent
+  - name: PiHole is Up to Date
+    shell: pihole -v | grep "Pi-hole version is v{{ pihole_version }}"
+    ignore_errors: yes
+    register: pihole_version_correct
+  - name: PiHole Update
+    when: pihole_version_correct is failed
+    shell: pihole -up
+  - name: PiHole Blocking enabled
+    become: yes
+    become_user: root
+    lineinfile:
+      dest: "{{ pihole_dir }}/pihole-FTL.conf"
+      line: "BLOCKINGMODE=IP-NODATA-AAAA"
+      state: present
+  - name: PiHole configured as DHCPD NameServer
+    become: yes
+    become_user: root
+    lineinfile:
+      dest: /etc/dhcp/dhcpd.conf
+      regexp: "^\ *option domain-name-servers"
+      line: " option domain-name-servers 192.168.42.1;"
+      state: present
+  - name: PiHole consults local lan list
+    become: yes
+    become_user: root
+    lineinfile:
+      dest: /etc/dnsmasq.d/02-lan.conf
+      create: yes
+      line: "addn-hosts=/etc/pihole/lan.list"
+      state: present
+  - name: PiHole local lan list is present
+    become: yes
+    become_user: root
+    copy:
+      dest: /etc/pihole/lan.list
+      src: files/etc.pihole.lan.list
+  - name: Restard DHCPD
+    become: yes
+    become_user: root
+    service:
+      name: isc-dhcp-server
+      state: restarted
+  - name: GO is on the PATH
+    become: yes
+    become_user: root
+    lineinfile:
+      dest: "{{ bash_rc }}"
+      line: "PATH=$PATH:/usr/local/go/bin"
+  - name: GO Check
+    shell: . {{ bash_rc }} && go version | grep {{ go_version }}
+    ignore_errors: yes
+    register: go_version_correct
+  - name: GO Install
+    when: go_version_correct is failed
+    become: yes
+    become_user: root
+    unarchive:
+      remote_src: yes
+      src: "https://dl.google.com/go/{{ go_file }}"
+      dest: /usr/local
+  - name: Ensure GoPath exists
+    when: go_version_correct is failed
+    file: 
+      path: "{{ go_src }}"
+      state: directory
+  - name: Caddy repos present
+    shell: . {{ bash_rc }} && go get -u {{ item }}
+    args:
+      creates: "{{ caddy_src_dir }}"
+      executable: /bin/bash
+    with_items:
+      - "{{ caddy_src_repo }}"
+      - "{{ caddy_build_repo }}"
+  - name: Caddy Check Version
+    shell: caddy -version | grep "Caddy {{ caddy_version }}"
+    ignore_errors: yes
+    register: caddy_version_correct
+  - name: Caddy Checkout Version
+    when: caddy_version_correct is failed
+    git:
+      repo: "https://{{ caddy_src_repo }}"
+      dest: "{{ caddy_src_dir }}"
+      force: yes
+      version: "v{{ caddy_version }}"
+  - name: Caddy telemetry disabled
+    when: caddy_version_correct is failed
+    lineinfile:
+      regexp: "^var EnableTelemetry"
+      line: "var EnableTelemetry = false"
+      dest: "{{ caddy_src_dir }}/caddy/caddymain/run.go"
+  - name: Build Caddy
+    when: caddy_version_correct is failed
+    retries: 10
+    delay: 3
+    register: result
+    until: result.rc == 0
+    shell: . {{ bash_rc }} && export GO111MODULE=on && go run build.go
+    args:
+      chdir: "{{ caddy_src_dir }}/caddy"
+  - name: Move Caddy to bins
+    when: caddy_version_correct is failed
+    become: yes
+    become_user: root
+    copy: 
+      remote_src: yes
+      src: "{{ caddy_src_dir }}/caddy/caddy"
+      dest: /usr/local/bin
+      mode: 0755
+  - name: Caddy SetCap
+    when: caddy_version_correct is failed
+    become: yes
+    become_user: root
+    shell: setcap cap_net_bind_service=+ep /usr/local/bin/caddy
+  - name: Ensure ~/.mantle exists
+    file: 
+      path: "{{ mantle_dir }}" 
+      state: directory
+  - name: Caddyfile is present
+    copy:
+      src: files/Caddyfile
+      dest: "{{ caddy_file }}"
+  - name: Change lighttpd Port
+    become: yes
+    become_user: root
+    lineinfile:
+      dest: /etc/lighttpd/lighttpd.conf
+      regexp: "server.port\ *="
+      line: "server.port = 1080"
+  - name: Restart Lighttpd
+    become: yes
+    become_user: root
+    service:
+      name: lighttpd
+      state: restarted
   - name: Caddy is running
     shell: . {{ bash_rc }} && pm2 list | grep caddy
     ignore_errors: yes
