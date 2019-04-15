@@ -227,6 +227,11 @@
       src: "{{ caddy_src_dir }}/caddy/caddy"
       dest: /usr/local/bin
       mode: 0755
+  - name: Caddy SetCap
+    when: caddy_version_correct is failed
+    become: yes
+    hecome_user: root
+    shell: setcap cap_net_bind_service=+ep /usr/local/bin/caddy
   - name: Ensure ~/.mantle exists
     file: 
       path: "{{ mantle_dir }}" 
@@ -242,6 +247,10 @@
       dest: /etc/lighttpd/lighttpd.conf
       regexp: "server.port\ *="
       line: "server.port = 1080"
+  - name: Restart Lighttpd
+    become: yes
+    become_user: root
+    
   - name: Caddy is running
     shell: pm2 list | grep caddy
     ignore_errors: yes
@@ -256,6 +265,8 @@
     shell: sudo env PATH=$PATH:{{ node_dir }}/bin pm2 startup systemd -u mantle --hp {{ ansible_env.HOME }}
     args:
       creates: "{{ pm2_service }}" 
+  - name: PM2 Startup enabled
+    
 
 
 
