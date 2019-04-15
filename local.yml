@@ -31,12 +31,12 @@
     mantle_dir: "{{ ansible_env.HOME }}/.mantle"
     caddy_file: "{{ mantle_dir }}/Caddyfile"
   tasks:
-  # - name: APT is up to date
-  #   become: yes
-  #   become_user: root
-  #   apt: 
-  #     upgrade: yes
-  #     update_cache: yes
+  - name: APT is up to date
+    become: yes
+    become_user: root
+    apt: 
+      upgrade: yes
+      update_cache: yes
   - name: NVM is present
     stat:
       path: "{{ nvm_path }}"
@@ -62,10 +62,10 @@
     args:
       creates: "{{ node_path }}"
       executable: /bin/bash
-  # - name: Node Alias is correct
-  #   shell: . ~/.bashrc && nvm alias default node
-  #   args:
-  #     executable: /bin/bash
+  - name: Node Alias is correct
+    shell: . ~/.bashrc && nvm alias default node
+    args:
+      executable: /bin/bash
   - name: Node is symlinked
     become: yes
     become_user: root
@@ -225,6 +225,7 @@
       remote_src: yes
       src: "{{ caddy_src_dir }}/caddy/caddy"
       dest: /usr/local/bin
+      mode: "+x"
   - name: Ensure ~/.mantle exists
     file: 
       path: "{{ mantle_dir }}" 
