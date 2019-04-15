@@ -247,14 +247,14 @@
     register: caddy_is_running
   - name: Run Caddy
     when: caddy_is_running is failed
-    shell: . {{ bash_rc }} && pm2 start /usr/local/bin/caddy -- -conf=~/.mantle/Caddyfile
+    shell: pm2 start /usr/local/bin/caddy -- -conf=~/.mantle/Caddyfile
   - name: PM2 save
     when: caddy_is_running is failed
     shell: pm2 save
   - name: PM2 Startup
     become: yes
     become_user: root
-    shell: pm2 startup
+    shell: . {{ bash_rc }} && pm2 startup
 
 
 
