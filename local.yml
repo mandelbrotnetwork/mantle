@@ -11,8 +11,6 @@
     pm2_version: 3.5.0
     pihole_version: 4.2.2 # must always be unchanged or latest
     go_version: 1.12.4
-    miniupnp_version: 2_1
-    miniupnp_src_repo: github.com/miniupnp/miniupnp
     caddy_version: 1.0.0-beta1
     bash_rc: "{{ ansible_env.HOME }}/.bashrc"
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
@@ -42,6 +40,10 @@
     apt: 
       upgrade: yes
       update_cache: yes
+  - name: APT modules are installed
+    become: yes
+    become_user: root
+    apt:
       name: miniupnpc
   - name: NVM is present
     stat:
