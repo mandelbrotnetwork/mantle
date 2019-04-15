@@ -263,7 +263,7 @@
     register: caddy_is_running
   - name: Run Caddy
     when: caddy_is_running is failed
-    shell: pm2 start /usr/local/bin/caddy -- -conf={{ caddy_file }}
+    shell: env PATH=$PATH:{{ node_dir }}/bin pm2 start /usr/local/bin/caddy -- -conf={{ caddy_file }}
   - name: PM2 save
     when: caddy_is_running is failed
     shell: pm2 save
