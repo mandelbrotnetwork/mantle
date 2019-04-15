@@ -1,4 +1,4 @@
-blackhole:80, pi.hole:80, {
+blackhole:80, pi.hole:80 {
   root /var/www/html/pihole
   log /var/log/caddy/blackhole.log
 
