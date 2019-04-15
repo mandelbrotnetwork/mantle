@@ -225,7 +225,7 @@
       remote_src: yes
       src: "{{ caddy_src_dir }}/caddy/caddy"
       dest: /usr/local/bin
-      mode: "+x"
+      mode: "x"
   - name: Ensure ~/.mantle exists
     file: 
       path: "{{ mantle_dir }}" 
