@@ -166,7 +166,7 @@
     copy:
       dest: /etc/pihole/lan.list
       src: files/etc.pihole.lan.list
-  - name: Restard DHCPD
+  - name: Restart DHCPD
     become: yes
     become_user: root
     service:
@@ -258,6 +258,15 @@
       dest: /etc/lighttpd/lighttpd.conf
       regexp: "server.port\ *="
       line: "server.port = 1080"
+  - name: Lighttpd log folder exists
+    become: yes
+    become_user: root
+    file:
+      path: /var/log/lighttpd
+      state: directory
+      owner: www-data
+      group: www-data
+      mode: 0755
   - name: Restart Lighttpd
     become: yes
     become_user: root
