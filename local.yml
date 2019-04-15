@@ -230,7 +230,7 @@
   - name: Caddy SetCap
     when: caddy_version_correct is failed
     become: yes
-    hecome_user: root
+    become_user: root
     shell: setcap cap_net_bind_service=+ep /usr/local/bin/caddy
   - name: Ensure ~/.mantle exists
     file: 
