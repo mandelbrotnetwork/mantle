@@ -254,7 +254,7 @@
     shell: pm2 save
   - name: PM2 Startup
     become: yes
-    shell:  env PATH=$PATH:{{ node_dir }}/bin {{ node_dir }}/lib/node_modules/pm2/bin/pm2 startup systemd -u mantle --hp {{ ansible_env.HOME }}
+    shell:  env PATH=$PATH:{{ node_dir }}/bin {{ node_dir }}/lib/node_modules/pm2/bin pm2 startup systemd -u mantle --hp {{ ansible_env.HOME }}
     args:
       creates: "{{ pm2_service }}" 
 
