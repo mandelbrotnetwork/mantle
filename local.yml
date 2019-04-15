@@ -274,9 +274,10 @@
     args:
       executable: /bin/bash
   - name: PM2 Startup
-    shell: sudo env PATH=$PATH:{{ node_dir }}/bin pm2 startup systemd -u mantle --hp {{ ansible_env.HOME }}
+    shell: . {{ bash_rc }} && sudo env PATH=$PATH:{{ node_dir }}/bin pm2 startup systemd -u mantle --hp {{ ansible_env.HOME }}
     args:
       creates: "{{ pm2_service }}"
+      executable: /bin/bash
     
 
 
