@@ -159,6 +159,12 @@
     copy:
       dest: /etc/pihole/lan.list
       src: files/etc.pihole.lan.list
+  - name: Restard DHCPD
+    become: yes
+    become_user: root
+    service:
+      name: isc-dhcp-server
+      state: restarted
   - name: GO is on the PATH
     become: yes
     become_user: root
