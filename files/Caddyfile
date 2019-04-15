@@ -1,4 +1,4 @@
-blackhole:80, pi.hole:80 {
+dns.mandelbrot:80 pi.hole:80 0.0.0.0:80 {
   root /var/www/html/pihole
   log /home/mantle/.mantle/blackhole.log
 
@@ -12,8 +12,6 @@ blackhole:80, pi.hole:80 {
   }
 }
 
-local.mandelbrot.network:80 {
-  proxy /pihole pi.hole:80 {
-    transparent
-  }
+local.mandelbrot:80 {
+  redir /dns http://dns.mandelbrot/admin
 }

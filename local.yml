@@ -153,14 +153,12 @@
       create: yes
       line: "addn-hosts=/etc/pihole/lan.list"
       state: present
-  - name: PiHole local lan list contains self reference to local.mandelbrot.network
+  - name: PiHole local lan list is present
     become: yes
     become_user: root
-    lineinfile:
+    copy:
       dest: /etc/pihole/lan.list
-      create: yes
-      line: "192.168.42.1 local.mandelbrot.network"
-      state: present
+      src: files/etc.pihole.lan.list
   - name: GO is on the PATH
     become: yes
     become_user: root
@@ -259,7 +257,7 @@
     register: caddy_is_running
   - name: Run Caddy
     when: caddy_is_running is failed
-    shell: pm2 start /usr/local/bin/caddy -- -conf=/{{ caddy_file }}
+    shell: pm2 start /usr/local/bin/caddy -- -conf={{ caddy_file }}
   - name: PM2 save
     when: caddy_is_running is failed
     shell: pm2 save
