@@ -193,12 +193,16 @@
       state: present
       system: yes
   - name: Cloudflared Config
+    become: yes
+    become_user: root
     lineinfile:
       path: /etc/default/cloudflared
       regexp: "CLOUDFLARED_OPTS=.*"
       line: "CLOUDFLARED_OPTS=--port 5053 --upstream https://1.1.1.1/dns-query --upstream https://1.0.0.1/dns-query"
       create: yes
   - name: Cloudflared CHOWNED
+    become: yes
+    become_user: root
     file:
       path: "{{ item }}"
       owner: cloudflared
@@ -207,10 +211,14 @@
       - /etc/default/cloudflared
       - /usr/local/bin/cloudflared
   - name: Cloudflared Systemd Service Defined
+    become: yes
+    become_user: root
     copy:
       src: files/lib.systemd.system.cloudflared.service
       dest: /lib/systemd/system/cloudflared.service
   - name: Cloudflared Systemd Service enabled
+    become: yes
+    become_user: root
     systemd:
       state: started
       name: cloudflared
