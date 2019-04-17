@@ -180,6 +180,34 @@
       src: "https://bin.equinox.io/c/VdrWdbjqyF/cloudflared-stable-linux-arm.tgz"
       dest: /usr/local/bin/
       mode: 0755
+  - name: Cloudflared User
+    user: 
+      shell: /usr/sbin/nologin
+      create_home: no
+      state: present
+      system: yes
+  - name: Cloudflared Config
+    lineinfile:
+      path: /etc/default/cloudflared
+      regexp: "CLOUDFLARED_OPTS=.*"
+      line: "CLOUDFLARED_OPTS=--port 5053 --upstream https://1.1.1.1/dns-query --upstream https://1.0.0.1/dns-query"
+      create: yes
+  - name: Cloudflared CHOWNED
+    file:
+      path: "{{ item }}"
+      owner: cloudflared
+      group: cloudflared
+    with_items:
+      - /etc/default/cloudflared
+      - /usr/local/bin/cloudflared
+  - name: Cloudflared Systemd Service Defined
+    copy:
+      src: files/lib.systemd.system.cloudflared.service
+      dest: /lib/systemd/system/cloudflared.service
+  - name: Cloudflared Systemd Service enabled
+    systemd:
+      state: started
+      name: cloudflared
   - name: Restart DHCPD
     become: yes
     become_user: root
