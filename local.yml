@@ -83,10 +83,12 @@
       state: link
       path: "/usr/local/bin/node"
   - name: PM2 is installed
-    shell: . {{ bash_rc }} && npm install -g pm2
-    args: 
-      creates: "{{ pm2_path }}"
-      executable: /bin/bash
+    npm:
+      name: pm2
+      version: "{{ pm2_version }}"
+      global: yes
+      state: present
+      production: yes    
   - name: PM2 is symlinked
     become: yes
     become_user: root
@@ -181,6 +183,8 @@
       dest: /usr/local/bin/
       mode: 0755
   - name: Cloudflared User
+    become: yes
+    become_user: yes
     user: 
       name: cloudflared
       shell: /usr/sbin/nologin
