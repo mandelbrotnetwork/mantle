@@ -10,7 +10,7 @@
     node_version: 11.14.0
     pm2_version: 3.5.0
     pihole_version: 4.2.2 # must always be unchanged or latest
-    cloudflared_verion: 2019.4.0  # must always be unchanged or latest
+    cloudflared_version: 2019.4.0  # must always be unchanged or latest
     go_version: 1.12.4
     caddy_version: 1.0.0-beta1
     bash_rc: "{{ ansible_env.HOME }}/.bashrc"
