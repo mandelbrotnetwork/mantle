@@ -185,7 +185,7 @@
       mode: 0755
   - name: Cloudflared User
     become: yes
-    become_user: yes
+    become_user: root
     user: 
       name: cloudflared
       shell: /usr/sbin/nologin
