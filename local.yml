@@ -183,7 +183,7 @@
   - name: Cloudflared User
     user: 
       shell: /usr/sbin/nologin
-      create_home: no
+      createhome: no
       state: present
       system: yes
   - name: Cloudflared Config
