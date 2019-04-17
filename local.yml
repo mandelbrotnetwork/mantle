@@ -10,6 +10,7 @@
     node_version: 11.14.0
     pm2_version: 3.5.0
     pihole_version: 4.2.2 # must always be unchanged or latest
+    cloudflared_verion: 2019.4.0  # must always be unchanged or latest
     go_version: 1.12.4
     caddy_version: 1.0.0-beta1
     bash_rc: "{{ ansible_env.HOME }}/.bashrc"
@@ -166,6 +167,19 @@
     copy:
       dest: /etc/pihole/lan.list
       src: files/etc.pihole.lan.list
+  - name: Cloudflared Check
+    shell: . {{ bash_rc }} && cloudflared -v | grep {{ go_version }}
+    ignore_errors: yes
+    register: cloudflared_version_correct
+  - name: Cloudflared installed
+    when: cloudflared_version_correct is failed
+    become: yes
+    become_user: root
+    unarchive:
+      remote_src: yes
+      src: "https://bin.equinox.io/c/VdrWdbjqyF/cloudflared-stable-linux-arm.tgz"
+      dest: /usr/local/bin/
+      mode: 0755
   - name: Restart DHCPD
     become: yes
     become_user: root
