@@ -148,7 +148,7 @@
     become_user: root
     systemd:
       state: started
-      name: cloudflared∏
+      name: cloudflared
   - name: Ensure PiHole Directory exists
     become: yes
     become_user: root
