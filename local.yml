@@ -97,6 +97,58 @@
       src: "{{ node_path }}"
       state: link
       path: "/usr/local/bin/pm2"
+  - name: Cloudflared Check
+    shell: . {{ bash_rc }} && cloudflared -v | grep {{ cloudflared_version }}
+    ignore_errors: yes
+    register: cloudflared_version_correct
+  - name: Cloudflared installed
+    when: cloudflared_version_correct is failed
+    become: yes
+    become_user: root
+    unarchive:
+      remote_src: yes
+      src: "https://bin.equinox.io/c/VdrWdbjqyF/cloudflared-stable-linux-arm.tgz"
+      dest: /usr/local/bin/
+      mode: 0755
+  - name: Cloudflared User
+    become: yes
+    become_user: root
+    user: 
+      name: cloudflared
+      shell: /usr/sbin/nologin
+      create_home: no
+      state: present
+      system: yes
+  - name: Cloudflared Config
+    become: yes
+    become_user: root
+    lineinfile:
+      path: /etc/default/cloudflared
+      regexp: "CLOUDFLARED_OPTS=.*"
+      line: "CLOUDFLARED_OPTS=--port 5053 --upstream https://1.1.1.1/dns-query --upstream https://1.0.0.1/dns-query"
+      create: yes
+  - name: Cloudflared CHOWNED
+    become: yes
+    become_user: root
+    file:
+      path: "{{ item }}"
+      owner: cloudflared
+      group: cloudflared
+    with_items:
+      - /etc/default/cloudflared
+      - /usr/local/bin/cloudflared
+  - name: Cloudflared Systemd Service Defined
+    become: yes
+    become_user: root
+    copy:
+      src: files/lib.systemd.system.cloudflared.service
+      dest: /lib/systemd/system/cloudflared.service
+  - name: Cloudflared Systemd Service enabled
+    become: yes
+    become_user: root
+    systemd:
+      state: started
+      name: cloudflared∏
   - name: Ensure PiHole Directory exists
     become: yes
     become_user: root
@@ -170,58 +222,7 @@
     copy:
       dest: /etc/pihole/lan.list
       src: files/etc.pihole.lan.list
-  - name: Cloudflared Check
-    shell: . {{ bash_rc }} && cloudflared -v | grep {{ cloudflared_version }}
-    ignore_errors: yes
-    register: cloudflared_version_correct
-  - name: Cloudflared installed
-    when: cloudflared_version_correct is failed
-    become: yes
-    become_user: root
-    unarchive:
-      remote_src: yes
-      src: "https://bin.equinox.io/c/VdrWdbjqyF/cloudflared-stable-linux-arm.tgz"
-      dest: /usr/local/bin/
-      mode: 0755
-  - name: Cloudflared User
-    become: yes
-    become_user: root
-    user: 
-      name: cloudflared
-      shell: /usr/sbin/nologin
-      create_home: no
-      state: present
-      system: yes
-  - name: Cloudflared Config
-    become: yes
-    become_user: root
-    lineinfile:
-      path: /etc/default/cloudflared
-      regexp: "CLOUDFLARED_OPTS=.*"
-      line: "CLOUDFLARED_OPTS=--port 5053 --upstream https://1.1.1.1/dns-query --upstream https://1.0.0.1/dns-query"
-      create: yes
-  - name: Cloudflared CHOWNED
-    become: yes
-    become_user: root
-    file:
-      path: "{{ item }}"
-      owner: cloudflared
-      group: cloudflared
-    with_items:
-      - /etc/default/cloudflared
-      - /usr/local/bin/cloudflared
-  - name: Cloudflared Systemd Service Defined
-    become: yes
-    become_user: root
-    copy:
-      src: files/lib.systemd.system.cloudflared.service
-      dest: /lib/systemd/system/cloudflared.service
-  - name: Cloudflared Systemd Service enabled
-    become: yes
-    become_user: root
-    systemd:
-      state: started
-      name: cloudflared
+
   - name: Restart DHCPD
     become: yes
     become_user: root
