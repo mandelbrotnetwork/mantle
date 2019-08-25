@@ -282,7 +282,7 @@
     delay: 3
     register: result
     until: result.rc == 0
-    shell: . {{ bash_rc }} && export GO111MODULE=on && go run build.go
+    shell: . {{ bash_rc }} && export GO111MODULE=on && go build
     args:
       chdir: "{{ caddy_src_dir }}/caddy"
   - name: Move Caddy to bins
