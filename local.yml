@@ -26,7 +26,7 @@
     go_file: "go{{ go_version }}.linux-armv6l.tar.gz"
     go_path: "{{ ansible_env.HOME }}/go"
     go_src: "{{ go_path }}/src"
-    caddy_src_repo: "github.com/mholt/caddy"
+    caddy_src_repo: "github.com/caddyserver/caddy"
     caddy_build_repo: "github.com/caddyserver/builds"
     caddy_src_dir: "{{ go_path }}/src/{{ caddy_src_repo }}"
     mantle_dir: "{{ ansible_env.HOME }}/.mantle"
@@ -259,7 +259,6 @@
       executable: /bin/bash
     with_items:
       - "{{ caddy_src_repo }}"
-      - "{{ caddy_build_repo }}"
   - name: Caddy Check Version
     shell: caddy -version | grep "Caddy {{ caddy_version }}"
     ignore_errors: yes
