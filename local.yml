@@ -12,7 +12,7 @@
     pihole_version: 4.2.2 # must always be unchanged or latest
     cloudflared_version: 2019.4.0  # must always be unchanged or latest
     go_version: 1.12.4
-    caddy_version: 1.0.0-beta1
+    caddy_version: 1.0.3
     bash_rc: "{{ ansible_env.HOME }}/.bashrc"
     nvm_dir: "{{ ansible_env.HOME }}/.nvm"
     nvm_path: "{{ nvm_dir }}/nvm.sh"
